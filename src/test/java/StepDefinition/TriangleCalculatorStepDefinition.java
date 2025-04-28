@@ -54,4 +54,24 @@ public class TriangleCalculatorStepDefinition {
     public void elResultadoEsIgualA(String nombreTriangulo) {
         triangleCalculatorStep.elResultadoEsIgualA(nombreTriangulo);
     }
+
+    @Entonces("se verifica que el lado {string} sea un numero positivo {string}")
+    public void seVerificaQueElLadoSeaUnNumeroPositivo(String nombreLado, String valorLado) throws Exception {
+        triangleCalculatorStep.seVerificaQueElLadoSeaUnNumeroPositivo(nombreLado,valorLado);
+    }
+
+    @Y("se verifica que el lado {string} sea un numero menor al permitido {string}")
+    public void seVerificaQueElLadoSeaUnNumeroMenorAlPermitido(String nombreLado, String valorLado) throws Exception {
+        triangleCalculatorStep.seVerificaQueElLadoSeaUnNumeroMenorAlPermitido(nombreLado,valorLado);
+    }
+
+    @Entonces("el boton CHECK se muestra desactivado")
+    public void elBotonCHECKSeMuestraDesactivado() throws Exception {
+        triangleCalculatorStep.elBotonCHECKSeMuestraDesactivado();
+    }
+
+    @Entonces("el campo {string} es de tipo numerico")
+    public void elCampoEsDeTipoNumerico(String nombreLado) throws Exception {
+        triangleCalculatorStep.elCampoEsDeTipoNumerico(nombreLado);
+    }
 }

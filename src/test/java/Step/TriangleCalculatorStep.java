@@ -45,4 +45,20 @@ public class TriangleCalculatorStep extends ScenarioSteps {
     public void elResultadoEsIgualA(String nombreTriangulo) {
         triangleCalculatorPage.elResultadoEsIgualA(nombreTriangulo);
     }
+
+    public void seVerificaQueElLadoSeaUnNumeroPositivo(String nombreLado, String valorLado) throws Exception {
+        triangleCalculatorPage.seVerificaQueElLadoSeaUnNumeroPositivo(nombreLado,valorLado);
+    }
+
+    public void seVerificaQueElLadoSeaUnNumeroMenorAlPermitido(String nombreLado, String valorLado) throws Exception {
+        triangleCalculatorPage.seVerificaQueElLadoSeaUnNumeroMenorAlPermitido(nombreLado,valorLado);
+    }
+
+    public void elBotonCHECKSeMuestraDesactivado() throws Exception {
+        triangleCalculatorPage.elBotonCHECKSeMuestraDesactivado();
+    }
+
+    public void elCampoEsDeTipoNumerico(String nombreLado) throws Exception {
+        triangleCalculatorPage.elCampoEsDeTipoNumerico(nombreLado);
+    }
 }

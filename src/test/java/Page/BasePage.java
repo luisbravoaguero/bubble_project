@@ -15,10 +15,13 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BasePage extends PageObject {
 
     @Managed
+    Logger LOGGER = Logger.getLogger(BasePage.class.getName());
     protected WebDriver driver;
     protected Actions actions;
 
@@ -117,6 +120,19 @@ public class BasePage extends PageObject {
         catch (Exception e)
         {
             throw new Exception("FAIL : No se puede escribir dentro del elemento: " + locator);
+        }
+    }
+
+    public void sendKeyAndNotFail(By locator, String textoCaja) throws Exception
+    {
+        try
+        {
+            WebElement element = waitElementToBeClickable(locator,10);
+            element.sendKeys(textoCaja);
+        }
+        catch (Exception e)
+        {
+            System.out.println("FAIL:NO se pudo ingresar el valor "+textoCaja+" en la caja de texto "+locator.toString());
         }
     }
 
@@ -381,18 +397,18 @@ public class BasePage extends PageObject {
             throw new Exception("FAIL : No se pudo obtener el valor del atributo value usando JavaScript: " + locator);
         }
     }
-    public WebElement waitForVisibility(By locator, int timeoutInSeconds) throws Exception {
-        try {
-            FluentWait<WebDriver> fluentWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds))
-                    .pollingEvery(Duration.ofSeconds(1))
-                    .ignoring(NoSuchElementException.class)
-                    .ignoring(StaleElementReferenceException.class);
-            return fluentWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
 
+    public String getAndReturnAnEmptyValueWhenTheinputIsEmpty(By locator) throws Exception {
+        try {
+            WebElement element = waitForVisibility(locator,10);
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+            return (String) javascriptExecutor.executeScript("return arguments[0].value;", element);
+        }
+        catch (Exception e) {
+            throw new Exception("FAIL : No se pudo obtener el valor del atributo value usando JavaScript: " + locator);
         }
     }
+
 
     public String getValidSelectedOption(By locator) throws Exception {
         try {
@@ -652,5 +668,53 @@ public class BasePage extends PageObject {
         );
         return type;
     }
+
+    public boolean isNumeric(String value){
+        if(value ==null || value.isEmpty()){
+            return false;
+        }
+        try{
+            Double.parseDouble(value);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
+
+    public boolean isNumericInputField(By locator){
+        try {
+            WebElement element = waitElementToBeClickable(locator, 10);
+            String type = element.getAttribute("type");
+            return "number".equalsIgnoreCase(type);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getCustomizedAttribute(By locator, String atributo) throws Exception {
+        try {
+            WebElement element = waitForVisibility(locator,10);
+            waitForSeconds(1);
+            return element.getAttribute(atributo);
+        } catch (Exception e) {
+            throw new Exception("FAIL : No se pudo recuperar el atributo '"+atributo+"' del xpath: " + locator);
+        }
+    }
+
+public WebElement waitForVisibility(By locator, int timeoutInSeconds) throws Exception {
+    try {
+        FluentWait<WebDriver> fluentWait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds))
+                .pollingEvery(Duration.ofSeconds(1))
+                .ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class);
+        return fluentWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }catch (Exception e){
+        this.LOGGER.log(Level.SEVERE,e.getMessage());
+        throw new Exception(e.getMessage());
+
+    }
 }
+}
+
+
 
